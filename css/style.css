@@ -194,9 +194,6 @@ body {
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
   padding: 15px 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 .login {
   background-color: #fff;
@@ -262,6 +259,13 @@ body {
   align-items: center;
   text-decoration: none;
 }
+.user-container {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  width: 100%;
+  justify-content: space-between;
+}
 .user-avatar {
   border-radius: 50%;
   margin-right: 17px;
@@ -276,6 +280,42 @@ body {
   width: 20px;
   height: 20px;
   fill: #000;
+}
+.edit-container {
+  display: none;
+}
+.edit-container.visible {
+  display: block;
+}
+.edit-label {
+  display: block;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.edit-input {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+}
+.edit-btn {
+  width: 100%;
+  background-color: #fa8c16;
+  border: 0;
+  color: #fff;
+  line-height: 32px;
+  font-size: 14px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.icon-edit {
+  width: 20px;
+  height: 20px;
+  fill: #000;
+  margin-left: 10px;
 }
 .sidebar-nav {
   background-color: #fff;
