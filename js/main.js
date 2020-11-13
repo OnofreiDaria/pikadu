@@ -28,6 +28,8 @@ const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatar = document.querySelector('.user-avatar');
 
 const postsWrapper = document.querySelector('.posts');
+const btnNewPost = document.querySelector('.button-new-post');
+const addPostElem = document.querySelector('.add-post');
 
 const listUsers = [
   {
@@ -104,7 +106,7 @@ const setPosts = {
       title: 'Заголовлок поста',
       text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первую подпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство чтовопроса ведущими о решила одна алфавит!',
       tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: 'pika@mail.com',
+      author: {displayName: 'pika', photo: 'https://www.pandasecurity.com/en/mediacenter/src/uploads/2013/11/pandasecurity-facebook-photo-privacy.jpg'},
       date: '11.11.2020, 20:54:00',
       like: 15,
       comments: 10
@@ -113,12 +115,29 @@ const setPosts = {
       title: 'Заголовлок поста2',
       text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad beatae delectus eos expedita minus modi, nam necessitatibus nobis odio pariatur perferendis possimus quisquam rem saepe, similique sint vero vitae, voluptatum?',
       tags: ['свежее', 'старое', 'холодное', 'мое', 'гласных'],
-      author: 'iusea@mail.com',
+      author: {displayName: 'kate', photo: 'https://i.pinimg.com/736x/e7/5f/78/e75f78a587c564c0bd4e68ce7fd08f04.jpg'},
       date: '10.11.2020, 09:22:32',
       like: 56,
       comments: 34
     }
-  ]
+  ],
+  addPost(title, text, tags, handler) {
+    this.allPosts.unshift({
+      title,
+      text,
+      tags: tags.split(',').map(item => item.trim()),
+      author: {
+        displayName: setUsers.user.displayName,
+        photo: setUsers.user.photo
+      },
+      date: new Date().toLocaleString(),
+      like: 0,
+      comments: 0
+    })
+    if(handler) {
+      handler();
+    }
+  }
 }
 
 const toggleAuthDom = () => {
@@ -128,22 +147,34 @@ const toggleAuthDom = () => {
     userElem.style.display = '';
     userName.textContent = user.displayName;
     userAvatar.src = user.photo || userAvatar.src;
+    btnNewPost.classList.add('visible');
   } else {
     loginElem.style.display = '';
     userElem.style.display = 'none';
+    btnNewPost.classList.remove('visible');
+    addPostElem.classList.remove('visible');
+    postsWrapper.classList.add('visible');
   }
 };
+const showAddPost = () => {
+  addPostElem.classList.add('visible');
+  postsWrapper.classList.remove('visible');
+}
 
 const showAllPosts = () => {
+  addPostElem.classList.remove('visible');
+  postsWrapper.classList.add('visible');
+
   let postHTML = '';
-  setPosts.allPosts.forEach( post => {
+
+  setPosts.allPosts.forEach( ({title, text, tags, like, comments, author, date}) => {
     postHTML += `
             <section class="post">
         <div class="post-body">
-          <h2 class="post-title">${post.title}</h2>
-          <p class="post-text">${post.text}</p>
+          <h2 class="post-title">${title}</h2>
+          <p class="post-text">${text}</p>
           <div class="tags">
-            <a href="#" class="tag">#свежее</a>
+            ${tags.map(tag => `<a href="#" class="tag">${tag}</a>`)}
           </div>
         </div>
         <div class="post-footer">
@@ -152,13 +183,13 @@ const showAllPosts = () => {
               <svg width="19" height="20" class="icon icon-like">
                 <use xlink:href="img/icons.svg#like"></use>
               </svg>
-              <span class="likes-counter">${post.like}</span>
+              <span class="likes-counter">${like}</span>
             </button>
             <button class="post-button comments">
               <svg width="21" height="21" class="icon icon-comment">
                 <use xlink:href="img/icons.svg#comment"></use>
               </svg>
-              <span class="comments-counter">${post.comments}</span>
+              <span class="comments-counter">${comments}</span>
             </button>
             <button class="post-button save">
               <svg width="19" height="19" class="icon icon-save">
@@ -174,10 +205,10 @@ const showAllPosts = () => {
 
           <div class="post-author">
             <div class="author-about">
-              <a href="#" class="author-username">${post.author}</a>
-              <span class="post-time">5 минут назад</span>
+              <a href="#" class="author-username">${author.displayName}</a>
+              <span class="post-time">${date}</span>
             </div>
-            <a href="#" class="author-link"><img src="img/avatar.jpeg" alt="avatar" class="author-avatar"></a>
+            <a href="#" class="author-link"><img src=${author.photo} alt="avatar" class="author-avatar"></a>
           </div>
 
         </div>
@@ -186,11 +217,10 @@ const showAllPosts = () => {
   });
 
   postsWrapper.innerHTML = postHTML;
-}
+};
+
 
 const init = () => {
-  showAllPosts();
-  toggleAuthDom();
   loginForm.addEventListener('submit', e => {
     e.preventDefault();
     setUsers.logIn(loginEmail.value, loginPassword.value, toggleAuthDom);
@@ -217,6 +247,30 @@ const init = () => {
     setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
     editContainer.classList.remove('visible');
   });
+  btnNewPost.addEventListener('click', e => {
+    e.preventDefault();
+    showAddPost();
+  });
+
+  addPostElem.addEventListener('submit', e => {
+    e.preventDefault();
+    const { title, text, tags } = addPostElem.elements;
+    if(title.value.length < 6) {
+      alert('Too short title')
+      return;
+    }
+    if(text.value.length < 50) {
+      alert('Too short post');
+      return;
+    }
+
+    setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
+    addPostElem.classList.remove('visible');
+    addPostElem.reset();
+  })
+
+  showAllPosts();
+  toggleAuthDom();
 }
 
 document.addEventListener('DOMContentLoaded', init);

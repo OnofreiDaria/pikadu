@@ -94,8 +94,13 @@ body {
   align-items: flex-start;
   justify-content: space-between;
 }
+
 .posts {
+  display: none;
   width: 67%;
+}
+.posts.visible {
+  display: block;
 }
 .post {
   background-color: #fff;
@@ -103,10 +108,7 @@ body {
   margin-bottom: 30px;
 }
 .post-body {
-  padding-top: 35px;
-  padding-left: 35px;
-  padding-right: 35px;
-  padding-bottom: 0;
+  padding: 35px 35px 0;
 }
 .post-title {
   margin-top: 0;
@@ -123,23 +125,24 @@ body {
 }
 .tags {
   margin-bottom: 22px;
+  color: #bfbfbf;
 }
 .tag {
   color: #bfbfbf;
   font-size: 14px;
   line-height: 22px;
-  margin-right: 10px;
+  margin-left: 10px;
   text-decoration: none;
+}
+.tag:first-child {
+  margin-left: 0;
 }
 .post-footer {
   border-top: 1px solid #e8e8e8;
   background: #fafafa;
   display: flex;
   justify-content: space-between;
-  padding-left: 35px;
-  padding-right: 35px;
-  padding-top: 13px;
-  padding-bottom: 13px;
+  padding: 13px 35px;
 }
 .post-buttons {
   display: flex;
@@ -378,6 +381,9 @@ body {
   width: 100%;
   margin-top: 20px;
 }
+.button-new-post.visible {
+  display: flex;
+}
 .icon-fire {
   fill: #fff;
   width: 11px;
@@ -445,11 +451,16 @@ body {
   color: #ffffff;
 }
 .add-post {
-  display: flex;
+  display: none;
   flex-direction: column;
+  width: 67%;
+}
+.add-post.visible {
+  display: flex;
 }
 .add-title,
-.add-text {
+.add-text,
+.add-tags {
   background: #ffffff;
   border: 1px solid #e8e8e8;
   padding: 23px 30px;
@@ -546,6 +557,7 @@ body {
   .author-avatar {
     margin-left: 0;
     margin-right: 10px;
+    object-fit: cover;
   }
   .author-about {
     order: 2;
